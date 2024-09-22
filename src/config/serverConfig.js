@@ -7,4 +7,5 @@ module.exports = {
   CHAT_SERVICE_URL: process.env.CHAT_SERVICE_URL,
   MAIL_SERVICE_URL: process.env.MAIL_SERVICE_URL,
   POST_SERVICE_URL: process.env.POST_SERVICE_URL,
+  DB_URI: process.env.DB_URI,
 };
