@@ -3,7 +3,7 @@ const { PORT } = require("./config/serverConfig");
 const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectToDB = require("./config/dbConfig");
-const initializeSocket = require("./config/socket");
+const { initializeSocket } = require("./utils/socket/socket");
 
 const setupAndStartServer = async () => {
   const app = express();
@@ -20,7 +20,7 @@ const setupAndStartServer = async () => {
   });
 
   //Socket initialization
-  const io = initializeSocket(server);
+  initializeSocket(server);
 };
 
 setupAndStartServer();
