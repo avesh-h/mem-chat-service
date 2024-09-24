@@ -4,6 +4,7 @@ const bodyParser = require("body-parser");
 const cors = require("cors");
 const connectToDB = require("./config/dbConfig");
 const { initializeSocket } = require("./utils/socket/socket");
+const serverRoutes = require("./routes/index");
 
 const setupAndStartServer = async () => {
   const app = express();
@@ -14,6 +15,9 @@ const setupAndStartServer = async () => {
 
   //DB connection
   connectToDB();
+
+  //Server routes
+  app.use("/api", serverRoutes);
 
   const server = app.listen(PORT, async () => {
     console.log("Chat Service is now on " + PORT);
