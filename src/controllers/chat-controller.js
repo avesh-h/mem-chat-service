@@ -7,11 +7,13 @@ const fetchChats = async (req, res) => {
     const chats = await chatService.getChatsOfUser(userId);
     return res.status(httpStatusCode.OK).json(chats);
   } catch (error) {
-    return res.status(error.statusCode).json({
-      message: error.message,
-      status: "failed",
-      error,
-    });
+    return res
+      .status(error.statusCode || httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({
+        message: error.message,
+        status: "failed",
+        error,
+      });
   }
 };
 
