@@ -41,6 +41,12 @@ class ChatService {
             chat?.latestMessage?.sender
           );
         }
+        // we want only the populate that user that i've one on one chat.
+        if (!chat?.isGroupChat) {
+          for (let i = 0; i < chatObj?.users?.length; i++) {
+            chatObj.users[i] = await this.getUserDetailsById(chat?.users?.[i]);
+          }
+        }
         allChats.push(chatObj);
       }
       return allChats;

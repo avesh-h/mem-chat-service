@@ -25,11 +25,11 @@ const initializeSocket = (server) => {
 
 //Getter function
 
-const getSocketInstance = () => {
+const getIO = () => {
   if (!io) {
     new Error("Socket is not initialized!");
   }
   return io;
 };
 
-module.exports = { initializeSocket, getSocketInstance, io };
+module.exports = { initializeSocket, getIO, io };
