@@ -19,4 +19,28 @@ const fetchMessages = async (req, res) => {
   }
 };
 
-module.exports = { fetchMessages };
+const sendMessage = async (req, res) => {
+  const { content, chatId } = req?.body;
+  const senderId = req?.userId;
+  try {
+    const newMessage = await messageService.sendMessage(
+      content,
+      chatId,
+      senderId
+    );
+    return res
+      .status(httpStatusCode.OK)
+      .json({ message: newMessage, status: "success" });
+    // After created message make sender populate to get name and pic
+  } catch (error) {
+    return res
+      .status(error.statusCode || httpStatusCode.INTERNAL_SERVER_ERROR)
+      .json({
+        message: error.message,
+        status: "failed",
+        error,
+      });
+  }
+};
+
+module.exports = { fetchMessages, sendMessage };

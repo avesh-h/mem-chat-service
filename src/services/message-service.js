@@ -1,3 +1,4 @@
+const chatRepository = require("../repositories/chat-repository");
 const messageRepository = require("../repositories/message-repository");
 const ServiceError = require("../utils/errors/service-error");
 const chatService = require("./chat-service");
@@ -18,6 +19,35 @@ class MessageService {
         allMessages.push(messageObj);
       }
       return allMessages;
+    } catch (error) {
+      throw new ServiceError(
+        error.name,
+        error.message,
+        error.explanation,
+        error.statusCode
+      );
+    }
+  }
+
+  async sendMessage(content, chatId, senderId) {
+    try {
+      let messageObj = {
+        sender: senderId,
+        content,
+        chat: chatId,
+      };
+      const newMessage = await messageRepository.createMessage(messageObj);
+      //Get sender details
+      let newMessageObj;
+      if (newMessage) {
+        newMessageObj = newMessage.toObject();
+        newMessageObj.sender = await chatService.getUserDetailsById(
+          newMessage?.sender
+        );
+      }
+      // Need to update the latest message of that chat
+      await chatRepository.updateLatestMessageOfChat(chatId, newMessage);
+      return newMessageObj;
     } catch (error) {
       throw new ServiceError(
         error.name,

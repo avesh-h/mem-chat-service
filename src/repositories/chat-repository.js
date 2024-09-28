@@ -16,6 +16,21 @@ class ChatRepository {
       throw error;
     }
   }
+
+  async updateLatestMessageOfChat(chatId, message) {
+    try {
+      const chat = await Chat.findOneAndUpdate(
+        { _id: chatId },
+        {
+          latestMessage: message,
+        },
+        { new: true }
+      );
+      return chat;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new ChatRepository();
