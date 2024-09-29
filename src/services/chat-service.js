@@ -81,6 +81,48 @@ class ChatService {
       );
     }
   }
+
+  async createChat(selectedChatUserId, userId) {
+    let chatObj;
+    try {
+      const previousChat = await chatRepository.findOldChatWithUser(
+        selectedChatUserId,
+        userId
+      );
+      if (previousChat?.[0]) {
+        chatObj = previousChat?.[0]?.toObject();
+        //If previous chat is present
+        // populate latestMessage.sender details
+        if (chatObj?.latestMessage) {
+          chatObj.latestMessage.sender = await this.getUserDetailsById(
+            previousChat?.[0]?.latestMessage?.sender
+          );
+        }
+      } else {
+        // create new chat with selected user
+        const chat = {
+          chatName: "sender",
+          isGroupChat: false,
+          users: [selectedChatUserId, userId],
+        };
+
+        const createdChat = await chatRepository.createChat(chat);
+        chatObj = createdChat?.toObject();
+        //populate the users of the chat for the UI.
+      }
+      for (let i = 0; i < chatObj?.users?.length; i++) {
+        chatObj.users[i] = await this.getUserDetailsById(chatObj.users[i]);
+      }
+      return chatObj;
+    } catch (error) {
+      throw new ServiceError(
+        error.name,
+        error.message,
+        error.explanation,
+        error.statusCode
+      );
+    }
+  }
 }
 
 module.exports = new ChatService();

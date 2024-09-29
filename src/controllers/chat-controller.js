@@ -32,4 +32,20 @@ const getAllSearchedUsers = async (req, res) => {
   }
 };
 
-module.exports = { fetchChats, getAllSearchedUsers };
+const createChat = async (req, res) => {
+  const { userId: selectedChatUserId } = req?.body;
+  const userId = req?.userId;
+  try {
+    // i'll find is it previous chat with this user.
+    const chat = await chatService.createChat(selectedChatUserId, userId);
+    return res.status(httpStatusCode.OK).json({ chat, status: "success" });
+  } catch (error) {
+    res.status(error.statusCode || httpStatusCode.INTERNAL_SERVER_ERROR).json({
+      message: error.message,
+      status: "failed",
+      error,
+    });
+  }
+};
+
+module.exports = { fetchChats, getAllSearchedUsers, createChat };

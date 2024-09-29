@@ -31,6 +31,38 @@ class ChatRepository {
       throw error;
     }
   }
+
+  async findOldChatWithUser(selectedChatUserId, userId) {
+    try {
+      const previousChat = await Chat.find({
+        isGroupChat: false,
+        $and: [
+          {
+            users: {
+              $elemMatch: {
+                $eq: selectedChatUserId,
+              },
+            },
+          },
+          {
+            users: { $elemMatch: { $eq: userId } },
+          },
+        ],
+      }).populate("latestMessage");
+      return previousChat;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async createChat(chatObj) {
+    try {
+      const chat = await Chat.create(chatObj);
+      return chat;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new ChatRepository();
