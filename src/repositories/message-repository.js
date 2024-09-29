@@ -13,7 +13,7 @@ class MessageRepository {
   async createMessage(msgObj) {
     try {
       const newMessage = await Message.create(msgObj);
-      return newMessage;
+      return newMessage?.populate("chat");
     } catch (error) {
       throw error;
     }

@@ -48,6 +48,13 @@ class MessageService {
       }
       // Need to update the latest message of that chat
       await chatRepository.updateLatestMessageOfChat(chatId, newMessage);
+      // populate each user of the chat for the emit the socket event for each user to norify that they get message.
+      for (let i = 0; i < newMessageObj?.chat?.users?.length; i++) {
+        // To populate each user of the chat
+        newMessageObj.chat.users[i] = await chatService.getUserDetailsById(
+          newMessageObj.chat.users[i]
+        );
+      }
       return newMessageObj;
     } catch (error) {
       throw new ServiceError(
