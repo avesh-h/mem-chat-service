@@ -38,6 +38,7 @@ class MessageService {
       };
       const newMessage = await messageRepository.createMessage(messageObj);
       //Get sender details
+      // After created message make sender populate to get name and pic
       let newMessageObj;
       if (newMessage) {
         newMessageObj = newMessage.toObject();

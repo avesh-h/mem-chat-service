@@ -59,6 +59,28 @@ class ChatService {
       );
     }
   }
+
+  async getUsersBySearch(keyWords, userId) {
+    try {
+      const response = await axios.get(
+        `${AUTH_SERVICE_URL}/api/v1/user/search-user?search=${keyWords}&user=${userId}`,
+        {
+          headers: {
+            "Content-Type": "application/json",
+          },
+        }
+      );
+      const users = await response?.data?.users;
+      return users;
+    } catch (error) {
+      throw new ServiceError(
+        error.name,
+        error.message,
+        error.explanation,
+        error.statusCode
+      );
+    }
+  }
 }
 
 module.exports = new ChatService();

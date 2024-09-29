@@ -31,7 +31,6 @@ const sendMessage = async (req, res) => {
     return res
       .status(httpStatusCode.OK)
       .json({ message: newMessage, status: "success" });
-    // After created message make sender populate to get name and pic
   } catch (error) {
     return res
       .status(error.statusCode || httpStatusCode.INTERNAL_SERVER_ERROR)
