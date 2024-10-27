@@ -63,6 +63,49 @@ class ChatRepository {
       throw error;
     }
   }
+
+  async renameGroup(chatId, chatName) {
+    try {
+      const updatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        { chatName },
+        { new: true }
+      );
+      return updatedChat;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async removeUserFromGroupChat(chatId, userId) {
+    try {
+      const updatedChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+          $pull: { users: userId },
+        },
+        { new: true }
+      );
+      return updatedChat;
+    } catch (error) {
+      throw error;
+    }
+  }
+
+  async addUserInGroupChat(chatId, userId) {
+    try {
+      const updatedGroupChat = await Chat.findByIdAndUpdate(
+        chatId,
+        {
+          $push: { users: userId },
+        },
+        { new: true }
+      );
+      return updatedGroupChat;
+    } catch (error) {
+      throw error;
+    }
+  }
 }
 
 module.exports = new ChatRepository();
